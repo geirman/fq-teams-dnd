@@ -25,11 +25,15 @@ const TeamMembers = styled.div`
 `
 
 class Team extends Component {
-    render () {
+
+    render() {
         return (
             <Container>
                 <Title>{this.props.team.name}</Title>
-                <Droppable droppableId={this.props.team.id}>
+                <Droppable
+                    droppableId={this.props.team.id}
+                    isDropDisabled={this.props.isDropDisabled}
+                >
                     {(provided, snapshot) => (
                         <TeamMembers
                             {...provided.droppableProps}

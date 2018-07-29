@@ -18,17 +18,20 @@ const data = {
         'unassigned': {
             id: 'unassigned',
             name: 'Unassigned',
-            playerIds: ['player-01','player-02','player-03','player-04','player-05','player-06','player-07','player-08','player-09','player-10','player-11','player-12','player-13']
+            playerIds: ['player-01', 'player-02', 'player-03', 'player-04', 'player-05', 'player-06', 'player-07', 'player-08', 'player-09', 'player-10', 'player-11', 'player-12', 'player-13'],
+            isFull: false,
         },
         'team-a': {
             id: 'team-a',
             name: 'Team A',
             playerIds: [],
+            isFull: false,
         },
         'team-b': {
             id: 'team-b',
             name: 'Team B',
             playerIds: [],
+            isFull: false,
         },
     },
     teamOrder: ['unassigned', 'team-a', 'team-b'],
