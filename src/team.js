@@ -24,6 +24,20 @@ const TeamMembers = styled.div`
     min-height: 100px;
 `
 
+class PlayerList extends Component {
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.players === this.props.players) {
+            return false;
+        }
+        return true;
+    }
+
+    render() {
+        return this.props.players.map((player, index) => <Player key={player.id} player={player} index={index} />)
+
+    }
+}
+
 class Team extends Component {
 
     render() {
@@ -40,7 +54,7 @@ class Team extends Component {
                             innerRef={provided.innerRef}
                             isDraggingOver={snapshot.isDraggingOver}
                         >
-                            {this.props.players.map((player, index) => <Player key={player.id} player={player} index={index} />)}
+                            <PlayerList players={this.props.players} />
                             {provided.placeholder}
                         </TeamMembers>
                     )}
