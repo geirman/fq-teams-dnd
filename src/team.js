@@ -16,6 +16,12 @@ const Container = styled.div`
 const Title = styled.h3`
     padding: 8px;
 `
+
+const Subtitle = styled.h5`
+    padding: 8px;
+    color: ${props => (props.isFull ? 'green' : 'lightgray')};
+    margin-top: -10px;
+`
 const TeamMembers = styled.div`
     padding: 8px;
     transition: background-color 0.2s ease;
@@ -44,6 +50,12 @@ class Team extends Component {
         return (
             <Container>
                 <Title>{this.props.team.name}</Title>
+                <Subtitle isFull={this.props.team.isFull}>
+                    {this.props.team.id !== 'unassigned'
+                        && 6 - this.props.team.playerIds.length + ' spots available'}
+                    {this.props.team.id === 'unassigned'
+                        && this.props.team.playerIds.length + ' players need a team'}
+                </Subtitle>
                 <Droppable
                     droppableId={this.props.team.id}
                     isDropDisabled={this.props.isDropDisabled}

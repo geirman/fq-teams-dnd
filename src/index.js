@@ -57,7 +57,7 @@ class App extends React.Component {
         const newStart = {
             ...start,
             playerIds: startPlayerIds,
-            isFull: startPlayerIds.length >= 6,
+            isFull: start.id !== 'unassigned' && startPlayerIds.length >= 6,
         };
 
         const finishPlayerIds = [...finish.playerIds]
@@ -65,7 +65,7 @@ class App extends React.Component {
         const newFinish = {
             ...finish,
             playerIds: finishPlayerIds,
-            isFull: finishPlayerIds.length >= 6,
+            isFull: finish.id !== 'unassigned' && finishPlayerIds.length >= 6,
         };
 
         const newState = {
