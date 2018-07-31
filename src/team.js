@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import { Droppable } from 'react-beautiful-dnd'
+import Ticker from 'react-flip-ticker'
 
 import Player from './player'
 
@@ -17,10 +18,15 @@ const Title = styled.h3`
     padding: 8px;
 `
 
-const Subtitle = styled.h5`
-    padding: 8px;
-    color: ${props => (props.isFull ? 'green' : 'lightgray')};
-    margin-top: -10px;
+const Subtitle = styled.p`
+    padding: 3px 8px;
+    color: ${props => (props.isFull ? 'DarkGreen' : 'white')};
+    margin-top: -3px;
+    background-color: ${props => (props.isFull ? 'LightGreen' : 'MediumPurple')};
+
+    display: flex;
+    align-content: center;
+
 `
 const TeamMembers = styled.div`
     padding: 8px;
@@ -52,9 +58,9 @@ class Team extends Component {
                 <Title>{this.props.team.name}</Title>
                 <Subtitle isFull={this.props.team.isFull}>
                     {this.props.team.id !== 'unassigned'
-                        && 6 - this.props.team.playerIds.length + ' spots available'}
+                        && <Fragment><Ticker>{`${6 - this.props.team.playerIds.length}`}</Ticker>&nbsp;spots available</Fragment>}
                     {this.props.team.id === 'unassigned'
-                        && this.props.team.playerIds.length + ' players need a team'}
+                        && <Fragment><Ticker style={{ color: 'red' }}>{`${this.props.team.playerIds.length}`}</Ticker>&nbsp;players need a team</Fragment>}
                 </Subtitle>
                 <Droppable
                     droppableId={this.props.team.id}
