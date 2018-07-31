@@ -11,7 +11,7 @@ const Container = styled.div`
     border-radius: 2px;
     width: 200px;
 
-    display: flex:
+    display: flex;
     flex-direction: column;
 `
 const Title = styled.h3`
