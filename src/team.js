@@ -21,7 +21,7 @@ const Title = styled.h3`
 const Subtitle = styled.p`
     padding: 3px 8px;
     color: ${props => (props.isFull ? 'DarkGreen' : 'white')};
-    margin-top: -3px;
+    margin-top: 0px;
     background-color: ${props => (props.isFull ? 'LightGreen' : 'MediumPurple')};
 
     display: flex;
