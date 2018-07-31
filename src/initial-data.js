@@ -18,6 +18,7 @@ const data = {
         'unassigned': {
             id: 'unassigned',
             name: 'Unassigned',
+            // playerIds: ['player-01', 'player-02'],
             playerIds: ['player-01', 'player-02', 'player-03', 'player-04', 'player-05', 'player-06', 'player-07', 'player-08', 'player-09', 'player-10', 'player-11', 'player-12', 'player-13'],
             isFull: false,
         },
@@ -33,8 +34,14 @@ const data = {
             playerIds: [],
             isFull: false,
         },
+        'team-c': {
+            id: 'team-c',
+            name: 'Team C',
+            playerIds: [],
+            isFull: false,
+        },
     },
-    teamOrder: ['unassigned', 'team-a', 'team-b'],
+    teamOrder: ['unassigned', 'team-a', 'team-b', 'team-c'],
 }
 
 export default data;

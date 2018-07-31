@@ -53,14 +53,24 @@ class PlayerList extends Component {
 class Team extends Component {
 
     render() {
+        const isUnassigned = this.props.team.id === 'unassigned';
+        const playerCount = this.props.team.playerIds.length;
         return (
             <Container>
                 <Title>{this.props.team.name}</Title>
                 <Subtitle isFull={this.props.team.isFull}>
-                    {this.props.team.id !== 'unassigned'
-                        && <Fragment><Ticker>{`${6 - this.props.team.playerIds.length}`}</Ticker>&nbsp;spots available</Fragment>}
-                    {this.props.team.id === 'unassigned'
-                        && <Fragment><Ticker style={{ color: 'red' }}>{`${this.props.team.playerIds.length}`}</Ticker>&nbsp;players need a team</Fragment>}
+
+                    {
+                        !isUnassigned
+                            ? (6 - playerCount) !== 0
+                                ? <Fragment><Ticker text={`${6 - playerCount}`} /> &nbsp; spots available</Fragment>
+                                : "Team is full!"
+                            : <Fragment><Ticker text={`${playerCount}`} />&nbsp; players need a team</Fragment>
+                        // : (playerCount !== 0)
+                        //     ? <Fragment><Ticker text={`${playerCount}`} />&nbsp; players need a team</Fragment>
+                        //     : "Done (for now)"
+
+                    }
                 </Subtitle>
                 <Droppable
                     droppableId={this.props.team.id}
