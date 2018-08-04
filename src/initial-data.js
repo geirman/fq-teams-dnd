@@ -42,6 +42,7 @@ const data = {
         },
     },
     teamOrder: ['unassigned', 'team-a', 'team-b', 'team-c'],
+    selectedPlayerIds: [],
 }
 
 export default data;

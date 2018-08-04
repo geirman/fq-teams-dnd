@@ -28,13 +28,20 @@ const Subtitle = styled.p`
     align-content: center;
 
 `
-const TeamMembers = styled.div`
+const TeamContainer = styled.div`
     padding: 8px;
     transition: background-color 0.2s ease;
     background-color: ${props => (props.isDraggingOver ? 'lightgray' : 'white')};
     flex-grow: 1;
     min-height: 100px;
 `
+
+// const getSelectedMap = (selectedPlayerIds = []) =>
+//     selectedPlayerIds.reduce((previous, current) => {
+//         previous[current] = true;
+//         return previous;
+//     }, {});
+
 
 class PlayerList extends Component {
     shouldComponentUpdate(nextProps, nextState) {
@@ -45,7 +52,22 @@ class PlayerList extends Component {
     }
 
     render() {
-        return this.props.players.map((player, index) => <Player key={player.id} player={player} index={index} />)
+        // const { team, players, selectedPlayerIds, draggingPlayerId } = this.props
+
+        return this.props.players.map((player, index) => {
+            // const isSelected: Boolean(getSelectedMap(selectedPlayerIds)[player.id])
+            return (<Player
+                player={player}
+                index={index}
+                key={player.id}
+                // isSelected={isSelected}
+                // isGhosting={isGhosting}
+                // selectionCount={selectedPlayerIds.length}
+                toggleSelection={this.props.toggleSelection}
+                toggleSelectionInGroup={this.props.toggleSelectionInGroup}
+                multiSelectTo={this.props.multiSelectTo}
+            />)
+        })
 
     }
 }
@@ -77,14 +99,19 @@ class Team extends Component {
                     isDropDisabled={this.props.isDropDisabled}
                 >
                     {(provided, snapshot) => (
-                        <TeamMembers
+                        <TeamContainer
                             {...provided.droppableProps}
                             innerRef={provided.innerRef}
                             isDraggingOver={snapshot.isDraggingOver}
                         >
-                            <PlayerList players={this.props.players} />
+                            <PlayerList
+                                players={this.props.players}
+                                toggleSelection={this.props.toggleSelection}
+                                toggleSelectionInGroup={this.props.toggleSelectionInGroup}
+                                multiSelectTo={this.props.multiSelectTo}
+                            />
                             {provided.placeholder}
-                        </TeamMembers>
+                        </TeamContainer>
                     )}
                 </Droppable>
             </Container>
