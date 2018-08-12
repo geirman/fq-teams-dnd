@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import '@atlaskit/css-reset';
 import { DragDropContext } from 'react-beautiful-dnd';
 import styled from 'styled-components'
+import { multiDragAwareReorder, multiSelectTo as multiSelect } from './utils'
 
 import initialData from './initial-data';
 import Team from './team';
@@ -10,15 +11,6 @@ import Team from './team';
 const Container = styled.div`
     display: flex;
 `
-
-const multiSelect = (selectedIds, newId) => {
-    // nothing already selected
-    if (!selectedIds.length) {
-        return [newId]
-    }
-
-    return;
-}
 
 
 class App extends React.Component {
@@ -127,14 +119,19 @@ class App extends React.Component {
         }
 
         this.setState({
-            selectedTaskIds: updated,
+            selectedPlayerIds: updated,
         });
     }
 
     onDragEnd = result => {
-        // console.log('[drag:end]', result)
+        console.log('[drag:end]', result)
         const { destination, source, draggableId } = result;
-        if (!destination) { return; }
+        if (!destination || result.reason === 'CANCEL') {
+            this.setState({
+                draggingPlayerId: null,
+            })
+            return
+        }
 
         if (
             destination.droppableId === source.droppableId &&
@@ -143,56 +140,70 @@ class App extends React.Component {
             return;
         }
 
-        const start = this.state.teams[source.droppableId]
-        const finish = this.state.teams[destination.droppableId]
+        const processed = multiDragAwareReorder({
+            entities: this.state.entities,
+            selectedPlayerIds: this.state.selectedPlayerIds,
+            source,
+            destination,
+        })
 
-        if (start === finish) {
-            const newPlayerIds = [...start.playerIds]
-            newPlayerIds.splice(source.index, 1);
-            newPlayerIds.splice(destination.index, 0, draggableId)
+        this.setState({
+            ...processed,
+            draggingPlayerId: null,
+        })
 
-            const newTeam = {
-                ...start,
-                playerIds: newPlayerIds,
-            }
+        // const start = this.state.entities.teams[source.droppableId]
+        // const finish = this.state.entities.teams[destination.droppableId]
 
-            const newState = {
-                ...this.state,
-                teams: {
-                    ...this.state.teams,
-                    [newTeam.id]: newTeam,
-                },
-            }
+        // reorder in the same column
+        // if (start === finish) {
+        //     const newPlayerIds = [...start.playerIds]
+        //     newPlayerIds.splice(source.index, 1);
+        //     newPlayerIds.splice(destination.index, 0, draggableId)
 
-            this.setState(newState)
-            return;
-        }
+        //     const newTeam = {
+        //         ...start,
+        //         playerIds: newPlayerIds,
+        //     }
 
-        const startPlayerIds = [...start.playerIds]
-        startPlayerIds.splice(source.index, 1)
-        const newStart = {
-            ...start,
-            playerIds: startPlayerIds,
-            isFull: start.id !== 'unassigned' && startPlayerIds.length >= 6,
-        };
+        //     const newState = {
+        //         ...this.state.entities,
+        //         teams: {
+        //             ...this.state.entities.teams,
+        //             [newTeam.id]: newTeam,
+        //         },
+        //     }
 
-        const finishPlayerIds = [...finish.playerIds]
-        finishPlayerIds.splice(destination.index, 0, draggableId)
-        const newFinish = {
-            ...finish,
-            playerIds: finishPlayerIds,
-            isFull: finish.id !== 'unassigned' && finishPlayerIds.length >= 6,
-        };
+        //     this.setState(newState)
+        //     return;
+        // }
 
-        const newState = {
-            ...this.state,
-            teams: {
-                ...this.state.teams,
-                [newStart.id]: newStart,
-                [newFinish.id]: newFinish,
-            },
-        };
-        this.setState(newState)
+
+        // const startPlayerIds = [...start.playerIds]
+        // startPlayerIds.splice(source.index, 1)
+        // const newStart = {
+        //     ...start,
+        //     playerIds: startPlayerIds,
+        //     isFull: start.id !== 'unassigned' && startPlayerIds.length >= 6,
+        // };
+
+        // const finishPlayerIds = [...finish.playerIds]
+        // finishPlayerIds.splice(destination.index, 0, draggableId)
+        // const newFinish = {
+        //     ...finish,
+        //     playerIds: finishPlayerIds,
+        //     isFull: finish.id !== 'unassigned' && finishPlayerIds.length >= 6,
+        // };
+
+        // const newState = {
+        //     ...this.state.entities,
+        //     teams: {
+        //         ...this.state.entities.teams,
+        //         [newStart.id]: newStart,
+        //         [newFinish.id]: newFinish,
+        //     },
+        // };
+        // this.setState(newState)
 
     }
     render() {
@@ -202,10 +213,10 @@ class App extends React.Component {
             >
                 <Container>
                     {
-                        this.state.teamOrder.map(teamId => {
-                            const team = this.state.teams[teamId];
-                            const players = team.playerIds.map(playerId => this.state.players[playerId]);
-                            const isDropDisabled = team.id !== 'unassigned' && this.state.teams[team.id].isFull;
+                        this.state.entities.teamOrder.map(teamId => {
+                            const team = this.state.entities.teams[teamId];
+                            const players = team.playerIds.map(playerId => this.state.entities.players[playerId]);
+                            const isDropDisabled = team.id !== 'unassigned' && this.state.entities.teams[team.id].isFull;
 
                             return <Team key={team.id}
                                 team={team}
