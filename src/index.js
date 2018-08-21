@@ -125,7 +125,7 @@ class App extends React.Component {
 
     onDragEnd = result => {
         console.log('[drag:end]', result)
-        const { destination, source, draggableId } = result;
+        const { destination, source } = result;
         if (!destination || result.reason === 'CANCEL') {
             this.setState({
                 draggingPlayerId: null,
